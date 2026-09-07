@@ -6,11 +6,9 @@
 
 all: test
 
-ROOT = ../../..
+ROOT = ../..
 
-CPP = $(ROOT)/cpp
-
-SRC = $(CPP)/src
+SRC = $(ROOT)/src
 
 NET = $(ROOT)/networks/xor.txt
 
@@ -18,7 +16,7 @@ test: main.cpp xor.hpp $(SRC)/*.hpp $(SRC)/posix/*.hpp
 	g++ -Wall -I$(SRC) -o test main.cpp
 
 xor.hpp: $(NET)
-	$(CPP)/utils/mkhdr.py $(NET) -o ./xor.hpp
+	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp
 
 run: test
 	./test

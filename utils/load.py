@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('input_file')
 
-parser.add_argument('-t', '--target', help='target board', default='basys3')
+parser.add_argument('-t', '--target', help='target board', default='cmod')
 
 parser.add_argument('-p', '--port', help='port', type=str,
                     default='/dev/ttyUSB1')
