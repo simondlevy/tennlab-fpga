@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2026 Simon D. Levy
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#pragma once
+
+#include <errno.h>
+#include <fcntl.h>
+#include <poll.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+
+#include <string>
+
+#include <serial.hpp>
+
+namespace neuro {
+
+    class UsbSerial : public neuro::Serial {
+
+        public:
+
+            UsbSerial(const std::string port, const bool debug=false)
+                : port_(port), debug_(debug) {}
+
+            void Begin()
+            {
+                const auto path = port_.c_str();
+                fd_ = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK);
+                if (fd_ < 0) {
+                    fprintf(stderr, "open %s: %s\n", path, strerror(errno));
+                    exit(1);
+                }
+
+                struct termios tio;
+                if (tcgetattr(fd_, &tio) != 0) {
+                    perror("tcgetattr");
+                    close(fd_);
+                    exit(1);
+                }
+
+                cfmakeraw(&tio);
+                tio.c_cflag &= ~(CSIZE | CSTOPB | PARENB | CRTSCTS);
+                tio.c_cflag |= CS8 | CLOCAL | CREAD;
+                tio.c_cc[VMIN] = 0;  /* poll() does the waiting */
+                tio.c_cc[VTIME] = 0;
+
+                if (cfsetispeed(&tio, kBaudRate) != 0 || cfsetospeed(&tio, kBaudRate) != 0) {
+                    perror("cfsetspeed");
+                    close(fd_);
+                    exit(1);
+                }
+                if (tcsetattr(fd_, TCSANOW, &tio) != 0) {
+                    perror("tcsetattr");
+                    close(fd_);
+                    exit(1);
+                }
+
+                tcflush(fd_, TCIOFLUSH);
+            }
+
+            void Write(const uint8_t byte)
+            {
+                if (debug_) {
+                    printf("write: 0x%02X\n", byte);
+                }
+                write(fd_, &byte, 1);
+            }
+
+            uint8_t Available()
+            {
+                size_t got = 0;
+
+                // Read until the line has been quiet for kDefaultTimeoutMsec, or buf is full
+                while (got < kMaxMessageSize) {
+
+                    struct pollfd pfd = { .fd = fd_, .events = POLLIN, .revents = 0 };
+
+                    int r = poll(&pfd, 1, kDefaultTimeoutMsec);
+                    if (r < 0) {
+                        if (errno == EINTR)
+                            continue;
+                        perror("poll");
+                        exit(1);
+                    }
+                    if (r == 0)
+                        break;
+
+                    size_t n = read(fd_, buf_ + got, kMaxMessageSize - got);
+                    if (n < 0) {
+                        if (errno == EINTR || errno == EAGAIN)
+                            continue;
+                        perror("read");
+                        exit(1);
+                    }
+                    if (n == 0)
+                        break;
+
+                    got += (size_t)n;
+                }
+
+                return got;
+            }
+
+            uint8_t Read(uint8_t index)
+            {
+                const auto byte = buf_[index];
+
+                if (debug_) {
+                    printf("read:  0x%02X\n", byte);
+                }
+
+                return byte;
+            }
+
+            void Close()
+            {
+                close(fd_);
+            }
+
+        private:
+
+            static const speed_t kBaudRate = B4000000;
+            static const size_t kMaxMessageSize = 4096;
+            static const uint32_t kDefaultTimeoutMsec = 20;
+
+            std::string port_;
+            int fd_;
+            uint8_t buf_[kMaxMessageSize] = {};
+            bool debug_;
+    };
+
+}
