@@ -36,5 +36,4 @@ namespace neuro {
 
     }; // class OutputQueue
 
-
 } // namespace neuro

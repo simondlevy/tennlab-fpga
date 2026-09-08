@@ -75,7 +75,7 @@ namespace neuro {
                 write(fd_, &byte, 1);
             }
 
-            uint8_t Available()
+            auto Available() -> uint8_t
             {
                 size_t got = 0;
 
@@ -110,7 +110,7 @@ namespace neuro {
                 return got;
             }
 
-            uint8_t Read(uint8_t index)
+            auto Read(uint8_t index) -> uint8_t
             {
                 const auto byte = buf_[index];
 
