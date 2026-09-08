@@ -12,7 +12,7 @@ SRC = $(ROOT)/src
 
 NET = $(ROOT)/networks/xor.txt
 
-test: main.cpp xor.hpp $(SRC)/*.hpp $(SRC)/posix/*.hpp
+test: main.cpp xor.hpp $(SRC)/*.hpp
 	g++ -Wall -I$(SRC) -o test main.cpp
 
 xor.hpp: $(NET)

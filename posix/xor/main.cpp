@@ -15,7 +15,7 @@
 #include <vector>
 
 #include <processor.hpp>
-#include <posix/usb_serial.hpp>
+#include <posix_serial.hpp>
 
 #include "xor.hpp"
 
