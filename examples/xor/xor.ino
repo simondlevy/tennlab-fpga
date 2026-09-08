@@ -14,8 +14,12 @@
 
 void setup()
 {
+    auto ser = neuro::TeensySerial();
+
+    proc.Begin(&ser);
 }
 
 void loop()
-{  
+{
 }
+

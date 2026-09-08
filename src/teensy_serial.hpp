@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <USBHost_t36.h>
+
 #include <string>
 
 #include <serial.hpp>
@@ -29,6 +31,7 @@ namespace neuro {
 
             void Begin()
             {
+                usb_.begin();
             }
 
             void Write(const uint8_t byte)
@@ -48,6 +51,10 @@ namespace neuro {
             void Close()
             {
             }
+
+        private:
+
+            USBHost usb_;
     };
 
 }
