@@ -16,6 +16,11 @@ namespace neuro {
 
     class TeensySerial : public neuro::Serial {
 
+        private:
+
+            static const size_t kMaxMessageSize = 4096;
+            static const uint32_t kDefaultTimeoutMsec = 20;
+
         public:
 
             TeensySerial()
@@ -43,12 +48,6 @@ namespace neuro {
             void Close()
             {
             }
-
-        private:
-
-            static const speed_t kBaudRate = B4000000;
-            static const size_t kMaxMessageSize = 4096;
-            static const uint32_t kDefaultTimeoutMsec = 20;
     };
 
 }

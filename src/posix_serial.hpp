@@ -26,6 +26,12 @@ namespace neuro {
 
     class UsbSerial : public neuro::Serial {
 
+        private:
+
+            static const speed_t kBaudRate = B4000000;
+            static const size_t kMaxMessageSize = 4096;
+            static const uint32_t kDefaultTimeoutMsec = 20;
+
         public:
 
             UsbSerial(const std::string port, const bool debug=false)
@@ -127,10 +133,6 @@ namespace neuro {
             }
 
         private:
-
-            static const speed_t kBaudRate = B4000000;
-            static const size_t kMaxMessageSize = 4096;
-            static const uint32_t kDefaultTimeoutMsec = 20;
 
             std::string port_;
             int fd_;

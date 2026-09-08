@@ -8,6 +8,7 @@
 
 #include <fpga_client.h>
 #include <processor.hpp>
+#include <teensy_serial.hpp>
 
 #include "xor.hpp"
 
