@@ -7,6 +7,9 @@
  */
 
 #include <fpga_client.h>
+#include <processor.hpp>
+
+#include "xor.hpp"
 
 void setup()
 {

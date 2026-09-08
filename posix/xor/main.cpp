@@ -21,11 +21,6 @@
 
 static const std::string kPortName = "/dev/ttyUSB1";
 
-static constexpr int kNumInputs = 2;
-static constexpr int kNumOutputs = 1;
-static constexpr int kChargeWidth = 2;
-static constexpr int kEntryValueFactor = 1;
-
 static void run(const uint8_t a, const uint8_t b)
 {
     proc.ClearActivity();
