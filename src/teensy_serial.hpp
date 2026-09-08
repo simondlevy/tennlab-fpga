@@ -20,6 +20,7 @@ namespace neuro {
 
         private:
 
+            static const uint32_t kBaudRate = 4'000'000;
             static const size_t kMaxMessageSize = 4096;
             static const uint32_t kDefaultTimeoutMsec = 20;
 
@@ -31,7 +32,13 @@ namespace neuro {
 
             void Begin()
             {
+                // Start the USB Host controller
                 usb_.begin();
+
+                // Start the USB Host serial port and set the baud rate for the
+                // connected device This sends a control message over USB to
+                // configure the external chip's physical UART speed
+                userial_.begin(kBaudRate);
             }
 
             void Write(const uint8_t byte)
@@ -55,6 +62,7 @@ namespace neuro {
         private:
 
             USBHost usb_;
+            USBSerial userial_ = USBSerial(usb_);
     };
 
 }
