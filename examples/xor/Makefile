@@ -23,7 +23,7 @@ build: $(SKETCH).ino xor.hpp $(SRC)/*.hpp
 		--fqbn $(FQBN) $(SKETCH).ino
 
 xor.hpp: $(NET)
-	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp
+	$(ROOT)/utils/mkhdr.py -d $(NET) -o ./xor.hpp
 
 flash:
 	arduino-cli upload -p $(PORT) --fqbn $(FQBN) .

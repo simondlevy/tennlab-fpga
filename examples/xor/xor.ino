@@ -7,14 +7,11 @@
  */
 
 #include <tennlab_fpga.h>
-#include <processor.hpp>
-#include <teensy_serial.hpp>
+#include <new_processor.hpp>
 
 #include "xor.hpp"
 
-static neuro::TeensySerial serial_(true);
-
-static void run(const uint8_t a, const uint8_t b)
+static void Run(const uint8_t a, const uint8_t b)
 {
     // proc_ is declared in auto-generated xor.hpp
     proc_.ClearActivity();
@@ -34,33 +31,33 @@ static void run(const uint8_t a, const uint8_t b)
     */
 }
 
+static void BlinkLed()
+{
+    static bool led_on_;
+    digitalWrite(LED_BUILTIN, led_on_);
+    led_on_ = !led_on_;
+}
+
 
 void setup()
 {
-    Serial.begin(0);
-    while (!Serial) {
-    }
+    proc_.Begin(&Serial1);
 
-    proc_.Begin(&serial_);
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() 
 {
-    // The Teensy USB Host library requires periodic polling to process data
-    serial_.Poll();
-
-    // Nothing can be sent until the FPGA board has enumerated
-    if (!serial_.IsReady()) {
-        return;
-    }
-
     static uint32_t msec_prev_;
     const auto msec_curr = millis();
-    if (true /*msec_curr - msec_prev_ > 1000*/) {
+    if (msec_curr - msec_prev_ > 1000) {
         msec_prev_ = msec_curr;
-        run(0, 0);
-        //run(0, 1);
-        //run(1, 0);
-        //run(1, 1);
+
+        Run(0, 0);
+        //Run(0, 1);
+        //Run(1, 0);
+        //Run(1, 1);
+
+        BlinkLed();
     }
 }

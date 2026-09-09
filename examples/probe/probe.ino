@@ -7,13 +7,6 @@
  */
 
 
-void serialEvent1()
-{
-    while (Serial1.available()) {
-        printf("%06lu: 0x%02X\n", millis(), Serial1.read());
-    }
-}
-
 void setup()
 {
     pinMode(LED_BUILTIN, OUTPUT);
@@ -33,6 +26,10 @@ void loop()
 
         Serial1.write(0xC0);
 
+        while (Serial1.available()) {
+            printf("%06lu: 0x%02X\n", millis(), Serial1.read());
+        }
+
         msec_prev_ = msec_curr;
     }
- }
+}
