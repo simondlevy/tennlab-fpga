@@ -78,6 +78,8 @@ namespace neuro {
             {
                 serial_ = serial;
                 serial_->begin(4'000'000);
+
+                ClearActivity();
             }
 
             void ApplySpike(const int id, const float time, const float value)
@@ -181,6 +183,8 @@ namespace neuro {
                 ClearActivity();
             }
 
+
+
         private:
 
             const size_t MAXMSG = 32;
@@ -237,15 +241,6 @@ namespace neuro {
                 serial_->write(byte);
             }
 
-            auto ReadByte() -> uint8_t
-            {
-                const auto byte = serial_->read();
-                if (debug_) {
-                    printf("DEBUG: read:  0x%02X\n", byte);
-                }
-                return byte;
-            }
-
             void Receive()
             {
 
@@ -267,7 +262,17 @@ namespace neuro {
                 }
             }
 
-             // Bit-twiddling -------------------------------------------------
+            auto ReadByte() -> uint8_t
+            {
+                const auto byte = serial_->read();
+                if (debug_) {
+                    printf("DEBUG: read:  0x%02X\n", byte);
+                }
+                return byte;
+            }
+
+
+            // Bit-twiddling -------------------------------------------------
 
             static auto WidthNearestByte(const int bits) -> int
             {

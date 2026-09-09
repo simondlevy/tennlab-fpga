@@ -42,6 +42,8 @@ void setup()
     proc_.Begin(&Serial1);
 
     pinMode(LED_BUILTIN, OUTPUT);
+
+    delay(5000);
 }
 
 void loop() 
