@@ -14,22 +14,14 @@ FQBN = teensy:avr:teensy40
 
 PORT = /dev/ttyACM0
 
-NET = $(ROOT)/networks/xor.txt
-
 LIBS = $(HOME)/Documents/Arduino/libraries
 
-build: $(SKETCH).ino xor.hpp $(SRC)/*.hpp
+build: $(SKETCH).ino $(SRC)/*.hpp
 	arduino-cli compile --libraries $(LIBS) --libraries $(ROOT) \
 		--fqbn $(FQBN) $(SKETCH).ino
 
-xor.hpp: $(NET)
-	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp
-
 flash:
 	arduino-cli upload -p $(PORT) --fqbn $(FQBN) .
-
-clean:
-	rm -rf xor.hpp
 
 edit:
 	vim $(SKETCH).ino
