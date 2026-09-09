@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 // Library header
-#include <fpga_client.h>
+#include <tennlab_fpga.h>
 
 // Local stuff
 #include "serial.hpp"

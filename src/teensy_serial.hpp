@@ -39,24 +39,22 @@ namespace neuro {
 
             void Write(const uint8_t byte)
             {
+                userial_.write(byte);
             }
 
             auto Available() -> uint8_t
             {
-                return 0;
+                return userial_.available();
             }
 
             auto Read(uint8_t index) -> uint8_t
             {
-                return 0;
-            }
-
-            void Close()
-            {
+                return userial_.read();
             }
 
             void Poll()
             {
+                usb_.Task();
             }
 
         private:

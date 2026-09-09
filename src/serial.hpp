@@ -23,7 +23,5 @@ namespace neuro {
             virtual uint8_t Available() = 0;
 
             virtual uint8_t Read(uint8_t index) = 0;
-
-            virtual void Close() = 0;
     };
 }

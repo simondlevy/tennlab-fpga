@@ -6,7 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <fpga_client.h>
+#include <tennlab_fpga.h>
 #include <processor.hpp>
 #include <teensy_serial.hpp>
 
@@ -22,43 +22,6 @@ void setup()
 
 void loop() 
 {
-    // The USB Host library requires periodic polling to process data
+    // The Teensy USB Host library requires periodic polling to process data
     serial_.Poll();
-
-    /*
-    usb_.Task();
-
-    // Check if the external USB device has sent any data to the Teensy
-    if (userial_.available()) {
-        Serial.println("Data received from USB Host device:");
-
-        // Read and print the data to the PC Serial Monitor
-        while (userial_.available()) {
-            char c = userial_.read();
-            Serial.print(c);
-        }
-        Serial.println();
-    }
-
-    // Example: Forward data from the PC Serial Monitor to the USB Host device
-    if (Serial.available()) {
-        while (Serial.available()) {
-            char c = Serial.read();
-            userial_.write(c);
-        }
-    }*/
 }
-
-#if 0
-
-void setup()
-{
-    auto ser = neuro::TeensySerial();
-
-    proc.Begin(&ser);
-}
-
-void loop()
-{
-}
-#endif

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <fpga_client.h>
+#include <tennlab_fpga.h>
 
 #include <math.h>
 
