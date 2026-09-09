@@ -232,7 +232,7 @@ namespace neuro {
             void WriteByte(const uint8_t byte)
             {
                 if (debug_) {
-                    printf("write: 0x%02X\n", byte);
+                    printf("DEBUG: write: 0x%02X\n", byte);
                 }
                 serial_->write(byte);
             }
@@ -241,7 +241,7 @@ namespace neuro {
             {
                 const auto byte = serial_->read();
                 if (debug_) {
-                    printf("read:  0x%02X\n", byte);
+                    printf("DEBUG: read:  0x%02X\n", byte);
                 }
                 return byte;
             }

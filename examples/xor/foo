@@ -1,0 +1,38 @@
+DEBUG: write: 0xC0
+DEBUG: read:  0xC0
+DEBUG: write: 0xC0
+DEBUG: read:  0xC0
+DEBUG: write: 0x03
+DEBUG: write: 0x80
+DEBUG: read:  0x03
+DEBUG: read:  0x80
+input = 0,0; output = 0
+DEBUG: write: 0xC0
+DEBUG: read:  0xC0
+DEBUG: write: 0x68
+DEBUG: write: 0x03
+DEBUG: write: 0x80
+DEBUG: read:  0x02
+DEBUG: read:  0x40
+DEBUG: read:  0x01
+DEBUG: read:  0x80
+input = 0,1; output = 1
+DEBUG: write: 0xC0
+DEBUG: read:  0xC0
+DEBUG: write: 0x48
+DEBUG: write: 0x03
+DEBUG: write: 0x80
+DEBUG: read:  0x02
+DEBUG: read:  0x40
+DEBUG: read:  0x01
+DEBUG: read:  0x80
+input = 1,0; output = 1
+DEBUG: write: 0xC0
+DEBUG: read:  0xC0
+DEBUG: write: 0x48
+DEBUG: write: 0x68
+DEBUG: write: 0x03
+DEBUG: write: 0x80
+DEBUG: read:  0x03
+DEBUG: read:  0x80
+input = 1,1; output = 0
