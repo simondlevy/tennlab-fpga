@@ -51,5 +51,7 @@ int main()
     run(1, 0);
     run(1, 1);
 
+    ser.Close();
+
     return 0;
 }

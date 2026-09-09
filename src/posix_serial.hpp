@@ -37,6 +37,13 @@ namespace neuro {
             UsbSerial(const std::string port, const bool debug=false)
                 : port_(port), debug_(debug) {}
 
+            void Close()
+            {
+                close(fd_);
+            }
+
+        private:
+
             void Begin()
             {
                 const auto path = port_.c_str();
@@ -126,13 +133,6 @@ namespace neuro {
 
                 return byte;
             }
-
-            void Close()
-            {
-                close(fd_);
-            }
-
-        private:
 
             std::string port_;
             int fd_;

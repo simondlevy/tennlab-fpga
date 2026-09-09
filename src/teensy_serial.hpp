@@ -26,10 +26,6 @@ namespace neuro {
 
         public:
 
-            TeensySerial()
-            {
-            }
-
             void Begin()
             {
                 // Start the USB Host controller
@@ -56,6 +52,10 @@ namespace neuro {
             }
 
             void Close()
+            {
+            }
+
+            void Poll()
             {
             }
 

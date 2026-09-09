@@ -18,21 +18,14 @@ void setup()
 {
     // proc_ is declared in auto-generated xor.hpp
     proc_.Begin(&serial_);
-
-    /*
-    // Start the USB Host controller
-    usb_.begin();
-
-    // Start the USB Host serial port and set the baud rate for the connected
-    // device This sends a control message over USB to configure the external
-    // chip's physical UART speed
-    userial_.begin(MY_BAUD_RATE);*/
 }
 
 void loop() 
 {
-    /*
     // The USB Host library requires periodic polling to process data
+    serial_.Poll();
+
+    /*
     usb_.Task();
 
     // Check if the external USB device has sent any data to the Teensy
