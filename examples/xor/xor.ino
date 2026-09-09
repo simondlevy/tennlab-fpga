@@ -19,6 +19,7 @@ static void run(const uint8_t a, const uint8_t b)
     // proc_ is declared in auto-generated xor.hpp
     proc_.ClearActivity();
 
+    /*
     if (a) {
         proc_.ApplySpike(0, 0, 1);
     }
@@ -30,11 +31,16 @@ static void run(const uint8_t a, const uint8_t b)
     proc_.Run(3);
 
     printf("input = %d,%d; output = %d\n", a, b, proc_.GetOutputCount(0));
+    */
 }
 
 
 void setup()
 {
+    Serial.begin(0);
+    while (!Serial) {
+    }
+
     proc_.Begin(&serial_);
 }
 
@@ -50,11 +56,11 @@ void loop()
 
     static uint32_t msec_prev_;
     const auto msec_curr = millis();
-    if (msec_curr - msec_prev_ > 1000) {
+    if (true /*msec_curr - msec_prev_ > 1000*/) {
         msec_prev_ = msec_curr;
         run(0, 0);
-        run(0, 1);
-        run(1, 0);
-        run(1, 1);
+        //run(0, 1);
+        //run(1, 0);
+        //run(1, 1);
     }
 }

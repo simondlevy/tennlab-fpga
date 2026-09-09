@@ -33,18 +33,21 @@ namespace neuro {
             {
                 usb_.Task();
 
-                const bool connected = (bool)userial_;
+                const bool connected = (bool)uart_;
 
                 if (connected && !connected_) {
 
                     // Only now can begin() actually reach the device.  Called
                     // before the board enumerates, it spins for five seconds
                     // and sets no baud rate at all.
-                    userial_.begin(kBaudRate);
+                    uart_.begin(kBaudRate);
 
                     if (debug_) {
-                        printf("connected: %04x:%04x\n",
-                                userial_.idVendor(), userial_.idProduct());
+                        printf("jtag channel: %04x:%04x %s\n",
+                                jtag_.idVendor(), jtag_.idProduct(),
+                                jtag_ ? "claimed" : "NOT CLAIMED");
+                        printf("uart channel: %04x:%04x claimed\n",
+                                uart_.idVendor(), uart_.idProduct());
                     }
                 }
 
@@ -71,7 +74,7 @@ namespace neuro {
                     printf("write: 0x%02X\n", byte);
                 }
 
-                userial_.write(byte);
+                uart_.write(byte);
             }
 
             // Gathers a whole reply into buf_, then reports its size.  As with
@@ -91,7 +94,7 @@ namespace neuro {
 
                     while (got < kMaxMessageSize) {
 
-                        const auto c = userial_.read();
+                        const auto c = uart_.read();
 
                         if (c < 0) {
                             break;
@@ -101,6 +104,10 @@ namespace neuro {
 
                         quiet = 0;
                     }
+                }
+
+                if (debug_) {
+                    printf("avail: %u\n", got);
                 }
 
                 return got;
@@ -119,10 +126,17 @@ namespace neuro {
 
             USBHost usb_;
 
-            // min_rxtx=1 so this claims full-speed adapters too; its 4096-byte
-            // receive buffer matches Processor::kSystemBufferSizeBytes, which
-            // plain USBSerial (648 bytes) would undershoot.
-            USBSerial_BigBuffer userial_ = USBSerial_BigBuffer(usb_, 1);
+            // The Cmod A7's FT2232H exposes two interfaces: channel A (0) is
+            // JTAG, channel B (1) is the UART we want.  One driver object
+            // claims one interface, in construction order, so the first of
+            // these absorbs the JTAG channel and the second gets the UART.
+            //
+            // min_rxtx=1 so these claim full-speed adapters too; BigBuffer is
+            // required for the FT2232H, whose high-speed bulk endpoints are
+            // 512 bytes -- more than plain USBSerial will accept -- and its
+            // 4096-byte receive buffer matches Processor::kSystemBufferSizeBytes.
+            USBSerial_BigBuffer jtag_ = USBSerial_BigBuffer(usb_, 1);
+            USBSerial_BigBuffer uart_ = USBSerial_BigBuffer(usb_, 1);
 
             uint8_t buf_[kMaxMessageSize] = {};
 
