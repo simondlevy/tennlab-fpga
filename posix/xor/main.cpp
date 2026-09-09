@@ -23,27 +23,28 @@ static const std::string kPortName = "/dev/ttyUSB1";
 
 static void run(const uint8_t a, const uint8_t b)
 {
-    proc.ClearActivity();
+    // proc_ is declared in auto-generated xor.hpp
+    proc_.ClearActivity();
 
     if (a) {
-        proc.ApplySpike(0, 0, 1);
+        proc_.ApplySpike(0, 0, 1);
     }
 
     if (b) {
-        proc.ApplySpike(1, 0, 1);
+        proc_.ApplySpike(1, 0, 1);
     }
 
-    proc.Run(3);
-    printf("input = %d,%d; output = %d\n", a, b, proc.GetOutputCount(0));
+    proc_.Run(3);
+    printf("input = %d,%d; output = %d\n", a, b, proc_.GetOutputCount(0));
 }
 
 int main()
 {
     auto ser = neuro::UsbSerial(kPortName);
 
-    proc.Begin(&ser);
+    proc_.Begin(&ser);
 
-    proc.ClearActivity();
+    proc_.ClearActivity();
 
     run(0, 0);
     run(0, 1);

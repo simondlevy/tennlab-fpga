@@ -12,7 +12,9 @@ namespace neuro {
 
     class Serial {
 
-        public:
+        friend class Processor;
+
+        private:
 
             virtual void Begin() = 0;
 

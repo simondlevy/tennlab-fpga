@@ -39,7 +39,7 @@ outfile = (sys.stdout if args.output_file is None
 outfile.write('// AUTO-GENERATED: DO NOT EDIT\n\n')
 outfile.write('#pragma once\n\n')
 outfile.write('#include <processor.hpp>\n\n')
-outfile.write('static auto proc = neuro::Processor(')
+outfile.write('static auto proc_ = neuro::Processor(')
 outfile.write('%d, ' % net.num_inputs())
 outfile.write('%d, ' % net.num_outputs())
 outfile.write('%d, ' % charge_width(net))

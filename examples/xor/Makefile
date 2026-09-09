@@ -29,7 +29,7 @@ flash:
 	arduino-cli upload -p $(PORT) --fqbn $(FQBN) .
 
 clean:
-	rm -rf obj
+	rm -rf xor.hpp
 
 edit:
 	vim $(SKETCH).ino

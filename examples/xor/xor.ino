@@ -10,25 +10,28 @@
 #include <processor.hpp>
 #include <teensy_serial.hpp>
 
-#define MY_BAUD_RATE 115200
+#include "xor.hpp"
 
-USBHost usb_;
+static neuro::TeensySerial serial_;
 
-USBSerial userial_(usb_);
+void setup()
+{
+    // proc_ is declared in auto-generated xor.hpp
+    proc_.Begin(&serial_);
 
-void setup() {
-
+    /*
     // Start the USB Host controller
     usb_.begin();
 
     // Start the USB Host serial port and set the baud rate for the connected
     // device This sends a control message over USB to configure the external
     // chip's physical UART speed
-    userial_.begin(MY_BAUD_RATE);
+    userial_.begin(MY_BAUD_RATE);*/
 }
 
 void loop() 
 {
+    /*
     // The USB Host library requires periodic polling to process data
     usb_.Task();
 
@@ -50,12 +53,10 @@ void loop()
             char c = Serial.read();
             userial_.write(c);
         }
-    }
+    }*/
 }
 
 #if 0
-
-#include "xor.hpp"
 
 void setup()
 {
