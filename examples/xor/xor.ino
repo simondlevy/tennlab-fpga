@@ -16,7 +16,6 @@ static void Run(const uint8_t a, const uint8_t b)
     // proc_ is declared in auto-generated xor.hpp
     proc_.ClearActivity();
 
-    /*
     if (a) {
         proc_.ApplySpike(0, 0, 1);
     }
@@ -28,7 +27,6 @@ static void Run(const uint8_t a, const uint8_t b)
     proc_.Run(3);
 
     printf("input = %d,%d; output = %d\n", a, b, proc_.GetOutputCount(0));
-    */
 }
 
 static void BlinkLed()
@@ -53,10 +51,14 @@ void loop()
     if (msec_curr - msec_prev_ > 1000) {
         msec_prev_ = msec_curr;
 
+        static uint32_t count_;
+
+        printf("%03lu ------------\n", count_++);
+
         Run(0, 0);
-        //Run(0, 1);
-        //Run(1, 0);
-        //Run(1, 1);
+        Run(0, 1);
+        Run(1, 0);
+        Run(1, 1);
 
         BlinkLed();
     }
