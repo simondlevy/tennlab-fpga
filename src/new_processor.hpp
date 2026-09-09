@@ -101,10 +101,6 @@ namespace neuro {
             {
                 SendCommand(MessageParser::kOpcodeClr);
 
-                if (debug_) {
-                    printf("CLR\n");
-                }
-
                 Receive();
 
                 output_time_ = 0;
@@ -155,10 +151,6 @@ namespace neuro {
                                     max_run_),
                                 max_runs_ahead_ + output_time_ - input_time_);
 
-                        if (debug_) {
-                            printf("RUN %d\n", to_run);
-                        }
-
                         SendCommand(MessageParser::kOpcodeRun, to_run);
 
                         input_time_ += runs;
@@ -167,10 +159,6 @@ namespace neuro {
                     }
 
                     if (run_time == target_time) {
-
-                        if (debug_) {
-                            printf("SNC\n");
-                        }
 
                         SendCommand(MessageParser::kOpcodeSnc);
                     }
@@ -222,10 +210,6 @@ namespace neuro {
 
                     const auto spike = spikes[k];
 
-                    if (debug_) {
-                        printf("SPK %d %.0f %.0f\n", spike.id, spike.time, spike.value);
-                    }
-
                     const uint8_t idx_mask = (1 << idx_width_) - 1;
                     const uint8_t val_mask = (1 << charge_width_) - 1;
 
@@ -257,7 +241,7 @@ namespace neuro {
             {
                 const auto byte = serial_->read();
                 if (debug_) {
-                    printf("read: 0x%02X\n", byte);
+                    printf("read:  0x%02X\n", byte);
                 }
                 return byte;
             }
