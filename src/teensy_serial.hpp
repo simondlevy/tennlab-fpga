@@ -10,8 +10,6 @@
 
 #include <USBHost_t36.h>
 
-#include <string>
-
 #include <serial.hpp>
 
 namespace neuro {
@@ -26,41 +24,111 @@ namespace neuro {
 
         public:
 
-            void Begin()
-            {
-                // Start the USB Host controller
-                usb_.begin();
+            TeensySerial(const bool debug=false)
+                : debug_(debug) { }
 
-                // Start the USB Host serial port and set the baud rate for the
-                // connected device This sends a control message over USB to
-                // configure the external chip's physical UART speed
-                userial_.begin(kBaudRate);
-            }
-
-            void Write(const uint8_t byte)
-            {
-                userial_.write(byte);
-            }
-
-            auto Available() -> uint8_t
-            {
-                return userial_.available();
-            }
-
-            auto Read(uint8_t index) -> uint8_t
-            {
-                return userial_.read();
-            }
-
+            // Must be called frequently from loop(): the USB Host library
+            // detects an attached device only inside Task().
             void Poll()
             {
                 usb_.Task();
+
+                const bool connected = (bool)userial_;
+
+                if (connected && !connected_) {
+
+                    // Only now can begin() actually reach the device.  Called
+                    // before the board enumerates, it spins for five seconds
+                    // and sets no baud rate at all.
+                    userial_.begin(kBaudRate);
+
+                    if (debug_) {
+                        printf("connected: %04x:%04x\n",
+                                userial_.idVendor(), userial_.idProduct());
+                    }
+                }
+
+                connected_ = connected;
+            }
+
+            auto IsReady() -> bool
+            {
+                return connected_;
             }
 
         private:
 
+            void Begin()
+            {
+                // Start the USB Host controller.  The serial port itself is
+                // opened by Poll(), once the FPGA board has enumerated.
+                usb_.begin();
+            }
+
+            void Write(const uint8_t byte)
+            {
+                if (debug_) {
+                    printf("write: 0x%02X\n", byte);
+                }
+
+                userial_.write(byte);
+            }
+
+            // Gathers a whole reply into buf_, then reports its size.  As with
+            // the POSIX driver, we wait until the link has been quiet for
+            // kDefaultTimeoutMsec: the FPGA's answer does not arrive
+            // instantaneously, so asking the USB Host library what it holds
+            // right now would nearly always report nothing.
+            auto Available() -> size_t
+            {
+                size_t got = 0;
+
+                elapsedMillis quiet;
+
+                while (got < kMaxMessageSize && quiet < kDefaultTimeoutMsec) {
+
+                    usb_.Task();
+
+                    while (got < kMaxMessageSize) {
+
+                        const auto c = userial_.read();
+
+                        if (c < 0) {
+                            break;
+                        }
+
+                        buf_[got++] = (uint8_t)c;
+
+                        quiet = 0;
+                    }
+                }
+
+                return got;
+            }
+
+            auto Read(const size_t index) -> uint8_t
+            {
+                const auto byte = buf_[index];
+
+                if (debug_) {
+                    printf("read:  0x%02X\n", byte);
+                }
+
+                return byte;
+            }
+
             USBHost usb_;
-            USBSerial userial_ = USBSerial(usb_);
+
+            // min_rxtx=1 so this claims full-speed adapters too; its 4096-byte
+            // receive buffer matches Processor::kSystemBufferSizeBytes, which
+            // plain USBSerial (648 bytes) would undershoot.
+            USBSerial_BigBuffer userial_ = USBSerial_BigBuffer(usb_, 1);
+
+            uint8_t buf_[kMaxMessageSize] = {};
+
+            bool connected_ = false;
+
+            bool debug_;
     };
 
 }

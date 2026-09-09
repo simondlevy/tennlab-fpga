@@ -8,6 +8,9 @@
 
 #pragma once
 
+#include <stddef.h>
+#include <stdint.h>
+
 namespace neuro {
 
     class Serial {
@@ -20,8 +23,8 @@ namespace neuro {
 
             virtual void Write(const uint8_t byte) = 0;
 
-            virtual uint8_t Available() = 0;
+            virtual size_t Available() = 0;
 
-            virtual uint8_t Read(uint8_t index) = 0;
+            virtual uint8_t Read(const size_t index) = 0;
     };
 }

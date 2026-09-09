@@ -40,7 +40,7 @@ namespace neuro {
             {
                 parser_ = MessageParser(num_inputs, num_outputs);
 
-                idx_width_ = num_inputs - 1;
+                idx_width_ = parser_.InputIndexWidth();
 
                 charge_width_ = charge_width;
                 spike_value_factor_ = spike_value_factor;
@@ -70,7 +70,7 @@ namespace neuro {
 
                 opc_shift_ = 8 - parser_.OpcodeWidth();
                 idx_shift_ = opc_shift_ - idx_width_;
-                val_shift_ = idx_shift_ - 2; // python bitstruct does two-bit padding
+                val_shift_ = idx_shift_ - charge_width;
             }
 
             void Begin(Serial * serial)
@@ -187,7 +187,7 @@ namespace neuro {
             {
                 const auto avail = serial_->Available();
 
-                for (uint8_t k=0; k<avail; ++k) {
+                for (size_t k=0; k<avail; ++k) {
                     
                     serial_->Read(k);
                 }
@@ -228,10 +228,15 @@ namespace neuro {
                         printf("SPK %d %.0f %.0f\n", spike.id, spike.time, spike.value);
                     }
 
+                    const uint8_t idx_mask = (1 << idx_width_) - 1;
+                    const uint8_t val_mask = (1 << charge_width_) - 1;
+
+                    const int8_t val = (int8_t)(spike.value * spike_value_factor_);
+
                     const uint8_t byte =
                         MessageParser::kOpcodeSpk << opc_shift_ |
-                        spike.id << idx_shift_ |
-                        (uint8_t)(spike.value*spike_value_factor_) << val_shift_;
+                        (spike.id & idx_mask) << idx_shift_ |
+                        (val & val_mask) << val_shift_;
 
                     WriteByte(byte);
                 }
@@ -251,7 +256,7 @@ namespace neuro {
             {
                 const auto avail = serial_->Available();
 
-                for (uint8_t k=0; k<avail; ++k) {
+                for (size_t k=0; k<avail; ++k) {
                     
                     const auto byte = serial_->Read(k);
 
