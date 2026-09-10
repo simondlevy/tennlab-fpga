@@ -18,7 +18,7 @@
 
 #include <string>
 
-#include <serial.hpp>
+#include <processor.hpp>
 
 static const char * kPort = "/dev/ttyUSB1";
 static constexpr speed_t kBaudRate = B4000000;
@@ -29,7 +29,7 @@ std::string port_;
 int fd_;
 uint8_t buf_[kMaxMessageSize] = {};
 
-void neuro::Serial::Connect()
+void neuro::Processor::Connect()
 {
     fd_ = open(kPort, O_RDWR | O_NOCTTY | O_NONBLOCK);
     if (fd_ < 0) {
@@ -64,12 +64,12 @@ void neuro::Serial::Connect()
     tcflush(fd_, TCIOFLUSH);
 }
 
-void neuro::Serial::Write(const uint8_t byte)
+void neuro::Processor::Write(const uint8_t byte)
 {
     write(fd_, &byte, 1);
 }
 
-auto neuro::Serial::Available() -> size_t
+auto neuro::Processor::Available() -> size_t
 {
     size_t got = 0;
 
@@ -104,7 +104,7 @@ auto neuro::Serial::Available() -> size_t
     return got;
 }
 
-auto neuro::Serial::Read(const size_t index) -> uint8_t
+auto neuro::Processor::Read(const size_t index) -> uint8_t
 {
     return buf_[index];
 }

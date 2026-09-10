@@ -14,12 +14,10 @@
 #include <tennlab_fpga.h>
 
 // Local stuff
-#include "serial.hpp"
 #include "output_queue.hpp"
 #include "message_parser.hpp"
 #include "spike.hpp"
 #include "spike_heap.hpp"
-
 
 namespace neuro {
 
@@ -72,11 +70,6 @@ namespace neuro {
                 opc_shift_ = 8 - parser_.OpcodeWidth();
                 idx_shift_ = opc_shift_ - idx_width_;
                 val_shift_ = idx_shift_ - charge_width;
-            }
-
-            void Connect()
-            {
-                Serial::Connect();
             }
 
             void ApplySpike(const int id, const float time, const float value)
@@ -173,7 +166,7 @@ namespace neuro {
 
             void Sync()
             {
-                const auto avail = Serial::Available();
+                const auto avail = Available();
 
                 for (size_t k=0; k<avail; ++k) {
                     
@@ -182,6 +175,9 @@ namespace neuro {
 
                 ClearActivity();
             }
+
+            // Hardware-dependent implementation
+            void Connect();
 
         private:
 
@@ -235,12 +231,12 @@ namespace neuro {
                 if (debug_) {
                     printf("DEBUG: write x%02X\n", byte);
                 }
-                Serial::Write(byte);
+                Write(byte);
             }
 
             auto ReadByte(const uint8_t k) -> uint8_t
             {
-                const auto byte = Serial::Read(k);
+                const auto byte = Read(k);
 
                 if (debug_) {
                     printf("DEBUG: read  x%02X\n", byte);
@@ -251,7 +247,7 @@ namespace neuro {
 
             void Receive()
             {
-                const auto avail = Serial::Available();
+                const auto avail = Available();
 
                 for (size_t k=0; k<avail; ++k) {
                     
@@ -287,6 +283,12 @@ namespace neuro {
             {
                 return bytes * 8;
             }
+
+            // Hardware-dependent implementation
+            void Write(const uint8_t byte);
+            size_t Available();
+            auto Read(const size_t index) -> uint8_t;
+
 
     }; // class Processor
 
