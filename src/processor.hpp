@@ -164,18 +164,6 @@ namespace neuro {
                 return out_queue_.counts[out_idx];
             }
 
-            void Sync()
-            {
-                const auto avail = Available();
-
-                for (size_t k=0; k<avail; ++k) {
-                    
-                    ReadByte();
-                }
-
-                ClearActivity();
-            }
-
             // Hardware-dependent implementation
             void Connect();
 
