@@ -80,6 +80,11 @@ namespace neuro {
                 serial_->Begin();
             }
 
+            void Begin();
+            void Write(const uint8_t byte);
+            size_t Available();
+            uint8_t Read();
+
             void ApplySpike(const int id, const float time, const float value)
             {
                 inp_queue_.Push(LevySpike(id, time + input_time_, value));
