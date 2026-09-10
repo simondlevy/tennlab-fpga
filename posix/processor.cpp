@@ -28,6 +28,7 @@ static constexpr uint32_t kDefaultTimeoutMsec = 20;
 std::string port_;
 int fd_;
 uint8_t buf_[kMaxMessageSize] = {};
+size_t index_;
 
 void neuro::Processor::Connect()
 {
@@ -101,10 +102,12 @@ auto neuro::Processor::Available() -> size_t
         got += (size_t)n;
     }
 
+    index_ = 0;
+
     return got;
 }
 
-auto neuro::Processor::Read(const size_t index) -> uint8_t
+auto neuro::Processor::Read() -> uint8_t
 {
-    return buf_[index];
+    return buf_[index_++];
 }

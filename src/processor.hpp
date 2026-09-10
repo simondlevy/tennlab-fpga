@@ -170,7 +170,7 @@ namespace neuro {
 
                 for (size_t k=0; k<avail; ++k) {
                     
-                    ReadByte(k);
+                    ReadByte();
                 }
 
                 ClearActivity();
@@ -234,9 +234,9 @@ namespace neuro {
                 Write(byte);
             }
 
-            auto ReadByte(const uint8_t k) -> uint8_t
+            auto ReadByte() -> uint8_t
             {
-                const auto byte = Read(k);
+                const auto byte = Read();
 
                 if (debug_) {
                     printf("DEBUG: read  x%02X\n", byte);
@@ -251,7 +251,7 @@ namespace neuro {
 
                 for (size_t k=0; k<avail; ++k) {
                     
-                    const auto byte = ReadByte(k);
+                    const auto byte = ReadByte();
 
                     const auto opcode = parser_.GetOpcode(byte);
 
@@ -286,8 +286,8 @@ namespace neuro {
 
             // Hardware-dependent implementation
             void Write(const uint8_t byte);
-            size_t Available();
-            auto Read(const size_t index) -> uint8_t;
+            auto Available() -> size_t;
+            auto Read() -> uint8_t;
 
 
     }; // class Processor
