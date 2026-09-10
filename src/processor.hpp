@@ -215,6 +215,7 @@ namespace neuro {
                 if (debug_) {
                     printf("DEBUG: write x%02X\n", byte);
                 }
+
                 Write(byte);
             }
 
@@ -232,6 +233,10 @@ namespace neuro {
             void Receive()
             {
                 const auto avail = Available();
+
+                if (debug_) {
+                    printf("DEBUG: avail %u\n", avail);
+                }
 
                 for (size_t k=0; k<avail; ++k) {
                     

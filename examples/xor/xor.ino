@@ -10,7 +10,6 @@
 
 #include "decl.hpp"
 
-/*
 static void Run(const uint8_t a, const uint8_t b)
 {
     // proc_ is declared in auto-generated xor.hpp
@@ -27,7 +26,7 @@ static void Run(const uint8_t a, const uint8_t b)
     proc_.Run(3);
 
     printf("input = %d,%d; output = %d\n", a, b, proc_.GetOutputCount(0));
-}*/
+}
 
 static void BlinkLed()
 {
@@ -47,11 +46,12 @@ void setup()
 
     proc_.ClearActivity();
 
-    /*
+    proc_.ClearActivity();
+
     Run(0, 0);
     Run(0, 1);
-    Run(1, 0);
-    Run(1, 1);*/
+    //Run(1, 0);
+    //Run(1, 1);
 }
 
 void loop() 
