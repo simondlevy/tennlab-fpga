@@ -12,8 +12,8 @@ SRC = $(ROOT)/src
 
 NET = $(ROOT)/networks/xor.txt
 
-test: main.cpp xor.hpp $(SRC)/*.hpp
-	g++ -Wall -I$(SRC) -I.. -o test main.cpp
+test: main.cpp xor.hpp ../serial.cpp $(SRC)/*.hpp
+	g++ -Wall -I$(SRC) -I.. -o test main.cpp ../serial.cpp
 
 xor.hpp: $(NET)
 	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp -d

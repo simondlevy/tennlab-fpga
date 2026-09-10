@@ -6,8 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#pragma once
-
 #include <errno.h>
 #include <fcntl.h>
 #include <poll.h>
