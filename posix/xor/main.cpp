@@ -19,8 +19,6 @@
 
 #include "xor.hpp"
 
-static const std::string kPortName = "/dev/ttyUSB1";
-
 static void run(const uint8_t a, const uint8_t b)
 {
     // proc_ is declared in auto-generated xor.hpp
@@ -40,7 +38,7 @@ static void run(const uint8_t a, const uint8_t b)
 
 int main()
 {
-    auto ser = neuro::UsbSerial(kPortName);
+    auto ser = neuro::UsbSerial();
 
     proc_.Begin(&ser);
 
@@ -50,8 +48,6 @@ int main()
     run(0, 1);
     run(1, 0);
     run(1, 1);
-
-    ser.Close();
 
     return 0;
 }

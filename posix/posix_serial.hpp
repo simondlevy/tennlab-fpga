@@ -22,33 +22,26 @@
 
 #include <serial.hpp>
 
+static const char * kPort = "/dev/ttyUSB1";
+static constexpr speed_t kBaudRate = B4000000;
+static constexpr size_t kMaxMessageSize = 4096;
+static constexpr uint32_t kDefaultTimeoutMsec = 20;
+
+std::string port_;
+int fd_;
+uint8_t buf_[kMaxMessageSize] = {};
+
 namespace neuro {
 
     class UsbSerial : public neuro::Serial {
 
         private:
 
-            static const speed_t kBaudRate = B4000000;
-            static const size_t kMaxMessageSize = 4096;
-            static const uint32_t kDefaultTimeoutMsec = 20;
-
-        public:
-
-            UsbSerial(const std::string port) : port_(port) {}
-
-            void Close()
-            {
-                close(fd_);
-            }
-
-        private:
-
             void Begin()
             {
-                const auto path = port_.c_str();
-                fd_ = open(path, O_RDWR | O_NOCTTY | O_NONBLOCK);
+                fd_ = open(kPort, O_RDWR | O_NOCTTY | O_NONBLOCK);
                 if (fd_ < 0) {
-                    fprintf(stderr, "open %s: %s\n", path, strerror(errno));
+                    fprintf(stderr, "open %s: %s\n", kPort, strerror(errno));
                     exit(1);
                 }
 
@@ -121,12 +114,9 @@ namespace neuro {
 
             auto Read(const size_t index) -> uint8_t
             {
-               return buf_[index];
+                return buf_[index];
             }
 
-            std::string port_;
-            int fd_;
-            uint8_t buf_[kMaxMessageSize] = {};
     };
 
 }
