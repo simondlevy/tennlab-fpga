@@ -46,8 +46,6 @@ void setup()
 
     proc_.ClearActivity();
 
-    proc_.ClearActivity();
-
     Run(0, 0);
     Run(0, 1);
     Run(1, 0);

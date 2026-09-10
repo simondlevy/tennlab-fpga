@@ -10,7 +10,8 @@
 
 #include <processor.hpp>
 
-static const uint32_t kBaudRate = 4'000'000;
+static const uint32_t kBaudRate = 4'000'000; // Based on FPGA
+static const uint32_t kDelayUsec = 10;       // Based on trial-and-error 
 
 void neuro::Processor::Connect()
 {
@@ -21,7 +22,7 @@ void neuro::Processor::Write(const uint8_t byte)
 {
     Serial1.write(byte);
 
-    delay(10);
+    delayMicroseconds(kDelayUsec);
 }
 
 auto neuro::Processor::Available() -> size_t
