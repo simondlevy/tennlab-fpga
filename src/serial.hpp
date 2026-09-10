@@ -15,16 +15,14 @@ namespace neuro {
 
     class Serial {
 
-        friend class Processor;
+        public:
 
-        private:
+            static void Connect();
 
-            virtual void Begin() = 0;
+            static void Write(const uint8_t byte);
 
-            virtual void Write(const uint8_t byte) = 0;
+            static size_t Available();
 
-            virtual size_t Available() = 0;
-
-            virtual uint8_t Read(const size_t index) = 0;
+            static uint8_t Read(const size_t index);
     };
 }

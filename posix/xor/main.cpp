@@ -38,9 +38,7 @@ static void run(const uint8_t a, const uint8_t b)
 
 int main()
 {
-    auto ser = neuro::UsbSerial();
-
-    proc_.Begin(&ser);
+    proc_.Connect();
 
     proc_.ClearActivity();
 

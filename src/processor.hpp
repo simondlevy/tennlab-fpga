@@ -74,16 +74,10 @@ namespace neuro {
                 val_shift_ = idx_shift_ - charge_width;
             }
 
-            void Begin(Serial * serial)
+            void Connect()
             {
-                serial_ = serial;
-                serial_->Begin();
+                Serial::Connect();
             }
-
-            void Begin();
-            void Write(const uint8_t byte);
-            size_t Available();
-            uint8_t Read();
 
             void ApplySpike(const int id, const float time, const float value)
             {
@@ -179,7 +173,7 @@ namespace neuro {
 
             void Sync()
             {
-                const auto avail = serial_->Available();
+                const auto avail = Serial::Available();
 
                 for (size_t k=0; k<avail; ++k) {
                     
@@ -193,7 +187,6 @@ namespace neuro {
 
             const size_t MAXMSG = 32;
 
-            Serial * serial_;
             int idx_width_;
             int charge_width_;
             int spike_value_factor_;
@@ -242,12 +235,12 @@ namespace neuro {
                 if (debug_) {
                     printf("DEBUG: write x%02X\n", byte);
                 }
-                serial_->Write(byte);
+                Serial::Write(byte);
             }
 
             auto ReadByte(const uint8_t k) -> uint8_t
             {
-                const auto byte = serial_->Read(k);
+                const auto byte = Serial::Read(k);
 
                 if (debug_) {
                     printf("DEBUG: read  x%02X\n", byte);
@@ -258,7 +251,7 @@ namespace neuro {
 
             void Receive()
             {
-                const auto avail = serial_->Available();
+                const auto avail = Serial::Available();
 
                 for (size_t k=0; k<avail; ++k) {
                     
