@@ -16,7 +16,7 @@ test: main.cpp xor.hpp $(SRC)/*.hpp
 	g++ -Wall -I$(SRC) -I.. -o test main.cpp
 
 xor.hpp: $(NET)
-	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp
+	$(ROOT)/utils/mkhdr.py $(NET) -o ./xor.hpp -d
 
 run: test
 	./test

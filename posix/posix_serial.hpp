@@ -34,8 +34,7 @@ namespace neuro {
 
         public:
 
-            UsbSerial(const std::string port, const bool debug=false)
-                : port_(port), debug_(debug) {}
+            UsbSerial(const std::string port) : port_(port) {}
 
             void Close()
             {
@@ -82,9 +81,6 @@ namespace neuro {
 
             void Write(const uint8_t byte)
             {
-                if (debug_) {
-                    printf("write: 0x%02X\n", byte);
-                }
                 write(fd_, &byte, 1);
             }
 
@@ -125,19 +121,12 @@ namespace neuro {
 
             auto Read(const size_t index) -> uint8_t
             {
-                const auto byte = buf_[index];
-
-                if (debug_) {
-                    printf("read:  0x%02X\n", byte);
-                }
-
-                return byte;
+               return buf_[index];
             }
 
             std::string port_;
             int fd_;
             uint8_t buf_[kMaxMessageSize] = {};
-            bool debug_;
     };
 
 }

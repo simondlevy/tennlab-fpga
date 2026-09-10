@@ -183,7 +183,7 @@ namespace neuro {
 
                 for (size_t k=0; k<avail; ++k) {
                     
-                    serial_->Read(k);
+                    ReadByte(k);
                 }
 
                 ClearActivity();
@@ -239,7 +239,21 @@ namespace neuro {
 
             void WriteByte(const uint8_t byte)
             {
+                if (debug_) {
+                    printf("DEBUG: write x%02X\n", byte);
+                }
                 serial_->Write(byte);
+            }
+
+            auto ReadByte(const uint8_t k) -> uint8_t
+            {
+                const auto byte = serial_->Read(k);
+
+                if (debug_) {
+                    printf("DEBUG: read  x%02X\n", byte);
+                }
+
+                return byte;
             }
 
             void Receive()
@@ -248,7 +262,7 @@ namespace neuro {
 
                 for (size_t k=0; k<avail; ++k) {
                     
-                    const auto byte = serial_->Read(k);
+                    const auto byte = ReadByte(k);
 
                     const auto opcode = parser_.GetOpcode(byte);
 
