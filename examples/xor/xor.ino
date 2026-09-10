@@ -7,7 +7,7 @@
  */
 
 #include <tennlab_fpga.h>
-#include <new_processor.hpp>
+#include <processor.hpp>
 
 #include "xor.hpp"
 
@@ -39,7 +39,7 @@ static void BlinkLed()
 
 void setup()
 {
-    proc_.Begin(&Serial1);
+    proc_.Connect();
 
     pinMode(LED_BUILTIN, OUTPUT);
 

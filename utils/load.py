@@ -16,21 +16,20 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('input_file')
 
-parser.add_argument('-t', '--target', help='target board', default='cmod')
+parser.add_argument('-t', '--target', help='target board',
+                    default='cmoda7_35t_pmod')
 
-parser.add_argument('-p', '--port', help='port', type=str,
+parser.add_argument('-p', '--port', help='target port',
                     default='/dev/ttyUSB1')
+
+parser.add_argument('-i', '--io_type', help='IO type',
+                    default='DIDO')
 
 args = parser.parse_args()
 
 net = neuro.Network()
+net.read_from_file(args.input_file)
 
-try:
-    net.read_from_file(args.input_file)
-except Exception:
-    print('Unable to read from ' + args.input_file)
-    exit(1)
+proc = fpga.Processor(args.target, args.port, args.io_type)
 
-proc = fpga.Processor(args.target, args.port, "DIDO")
-
-proc.load_network(net)
+proc.load_network_nonvolatile(net)
