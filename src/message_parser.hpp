@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <tennlab_fpga.h>
-
 #include <math.h>
 
 namespace neuro {

@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <tennlab_fpga.h>
-
 namespace neuro {
 
     class LevySpike {

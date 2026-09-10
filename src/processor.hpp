@@ -10,10 +10,6 @@
 
 #include <stdio.h>
 
-// Library header
-#include <tennlab_fpga.h>
-
-// Local stuff
 #include "output_queue.hpp"
 #include "message_parser.hpp"
 #include "spike.hpp"

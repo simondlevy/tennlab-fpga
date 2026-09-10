@@ -6,7 +6,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <tennlab_fpga.h>
 #include <processor.hpp>
 
 #include "decl.hpp"

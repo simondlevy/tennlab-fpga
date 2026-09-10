@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include <tennlab_fpga.h>
-
 #include "spike.hpp"
 
 namespace neuro {
