@@ -50,8 +50,8 @@ void setup()
 
     Run(0, 0);
     Run(0, 1);
-    //Run(1, 0);
-    //Run(1, 1);
+    Run(1, 0);
+    Run(1, 1);
 }
 
 void loop() 

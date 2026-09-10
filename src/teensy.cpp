@@ -20,6 +20,8 @@ void neuro::Processor::Connect()
 void neuro::Processor::Write(const uint8_t byte)
 {
     Serial1.write(byte);
+
+    delay(10);
 }
 
 auto neuro::Processor::Available() -> size_t
